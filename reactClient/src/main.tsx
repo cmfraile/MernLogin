@@ -1,7 +1,23 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App'
+import { BrowserRouter , Routes , Route , Navigate } from 'react-router-dom';
+import { authProvider as AP } from './auth/context/login.context';
+import { PublicRoute } from './auth/routes/auth.routes';
+
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../node_modules/bootstrap/dist/js/bootstrap.min.js';
+import './app.sass'
+import LoginOrRegister from './pages/login.page';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode><App /></React.StrictMode>,
+  <React.StrictMode>
+    <AP>
+      <BrowserRouter>
+        <Routes>
+          <Route path='' element={ <PublicRoute><LoginOrRegister/></PublicRoute> } />
+          <Route path='*' element={ <PublicRoute><Navigate to=''/></PublicRoute> } />
+        </Routes>
+      </BrowserRouter>
+    </AP>
+  </React.StrictMode>,
 )

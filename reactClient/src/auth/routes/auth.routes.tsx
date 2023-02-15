@@ -1,20 +1,17 @@
-/*
 import { useContext } from "react"
-import { AuthContext } from "../context/authcontext"
 import { Navigate } from "react-router-dom";
-import { Login } from "../pages/login";
+import { authContext } from "../context/login.context";
 
 export const PrivateRoute = ({children}:any) => {
-    const { aname } = useContext(AuthContext);
-    return (aname !== undefined)
+    const { logged } = useContext(authContext);
+    return (logged)
     ? children
     : <Navigate to='/'/>
 }
 
 export const PublicRoute = ({children}:any) => {
-    const { aname } = useContext(AuthContext);
-    return (aname == undefined)
+    const { logged } = useContext(authContext);
+    return (!logged)
     ? children
-    : <Navigate to='/marvel'/>
+    : <Navigate to='/private'/>
 }
-*/

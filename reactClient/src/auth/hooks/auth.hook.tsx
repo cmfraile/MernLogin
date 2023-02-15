@@ -31,7 +31,7 @@ const authHook = () => {
         logout:() => {authDispatch({type:logout})}
     }
 
-    return ({auth,authCrud:auth})
+    return ({...auth,authCrud:auth})
 }
 
 export default authHook ;

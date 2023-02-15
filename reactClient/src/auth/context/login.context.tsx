@@ -1,6 +1,7 @@
 import { createContext } from "react";
+import authHook from "../hooks/auth.hook";
 
-export const loginContext = createContext<any>({});
-export const todoProvider = ({children}:any) => {
-    return(<loginContext.Provider value={{}}>{children}</loginContext.Provider>)
+export const authContext = createContext<any>({});
+export const authProvider = ({children}:any) => {
+    return(<authContext.Provider value={{...authHook()}}>{children}</authContext.Provider>)
 }
