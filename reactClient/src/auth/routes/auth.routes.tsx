@@ -4,9 +4,9 @@ import { authContext } from "../context/login.context";
 
 export const PrivateRoute = ({children}:any) => {
     const { logged } = useContext(authContext);
-    return (logged)
+    return (!logged)
     ? children
-    : <Navigate to='/'/>
+    : <Navigate to=''/>
 }
 
 export const PublicRoute = ({children}:any) => {

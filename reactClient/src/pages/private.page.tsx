@@ -1,14 +1,14 @@
-const LoginOrRegister = () => {
+const Private = () => {
 
     return(
         <div className="container">
 
             <div className="row"><div className="col">
-                <h2>Login or Register</h2>
+                <h2>Private zone</h2>
             </div></div>
 
         </div>
     )
 }
 
-export default LoginOrRegister
+export default Private
