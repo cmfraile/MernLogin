@@ -1,9 +1,9 @@
 import { useReducer } from "react";
 
-interface auth {logged:boolean} ; const initialState = {logged:false};
+interface auth {logged:boolean|undefined} ; const initialState = {logged:undefined};
 enum acts {login = '[ AUTH ] Login' , logout = '[ AUTH ] Logout'} ; interface action { type:acts , payload?:auth }
 
-const authReducer = ( state:auth  , action:action ) => {
+const authReducer = ( state:auth , action:action ) => {
 
     if(!action){return state};
 
