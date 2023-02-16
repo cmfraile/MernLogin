@@ -28,8 +28,7 @@ class Server {
     private routes(){
 
         const controllersIndexed:{[key:string]:any} = {...controllers}
-
-        const apiPointer:string[] = ['ping'];
+        const apiPointer:string[] = ['ping','user'];
 
         let pathCrafter:{[key:string]:{route:string,router:Router}} = {} ;
         apiPointer.map(x => {
