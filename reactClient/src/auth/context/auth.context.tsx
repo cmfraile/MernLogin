@@ -9,7 +9,7 @@ export const authProvider = ({children}:any) => {
 
     return(
         (data !== null && !isLoading)
-        ? <authContext.Provider value={{logged,authCrud}}>{children}</authContext.Provider>
+        ? <authContext.Provider value={{data,isLoading,error}}>{children}</authContext.Provider>
         : <div className="container">
             {(error)
             ? <GridLoader color="#17FF00"/>

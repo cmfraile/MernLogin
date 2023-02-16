@@ -7,10 +7,9 @@ interface getFetch <T>{data:T|null,isLoading:boolean,error:any}
 interface useFetchDefaultObject { route:string , method:method , body:any , headers:any };
 const useFetchDefaultArgument:useFetchDefaultObject = { route:'',method:'GET',body:undefined,headers:undefined };
 
+const useFetchHook = <queryData>({route,method,body,headers} = useFetchDefaultArgument):any => {
 
-export const useFetchHook = <T>({route,method,body,headers}:useFetchDefaultObject):any => {
-
-    const [ state , setState ] = useState<getFetch<T>>({data:null,isLoading:true,error:null});
+    const [ state , setState ] = useState<getFetch<queryData>>({data:null,isLoading:true,error:null});
 
     const getFetch = async():Promise<void> => {
 
@@ -21,8 +20,10 @@ export const useFetchHook = <T>({route,method,body,headers}:useFetchDefaultObjec
 
     }
 
-    useEffect(() => { getFetch() },[url]);
+    //useEffect(() => { getFetch() },[url]);
     
-    return({fetchState:state,getFetch});
-    
+    return({...state,getFetch});
+
 }
+
+export default useFetchHook
