@@ -2,9 +2,8 @@ import express , { Application, Router } from 'express';
 import { dataBaseConnection } from '../database/configDB';
 import cors from 'cors';
 import fileUpload from 'express-fileupload';
+import * as controllers from '../controllers';
 
-//import * as controllers from '../controllers';
-//const controllersIndexed:{[key:string]:any} = {...controllers}
 
 class Server {
 
@@ -16,7 +15,7 @@ class Server {
         this.port   =   process.env.PORT || '8000' ;
         this.middlewares();
         //this.databaseTasks();
-        //this.routes();
+        this.routes();
     }
 
     private middlewares(){
@@ -26,20 +25,11 @@ class Server {
         this.app.use(fileUpload({useTempFiles:true,tempFileDir:'/tmp/',createParentPath:true}));
     };
 
-    private async databaseTasks(){
-        await dataBaseConnection();
-    };
-
-    //private routes(){}
-
-    public listen(){ this.app.listen(this.port) ; console.log('Backend ON') };
-
-}
-
-export default Server ;
-
-/*
     private routes(){
+
+        const controllersIndexed:{[key:string]:any} = {...controllers}
+
+        const apiPointer:string[] = ['ping'];
 
         let pathCrafter:{[key:string]:{route:string,router:Router}} = {} ;
         apiPointer.map(x => {
@@ -55,4 +45,19 @@ export default Server ;
         });
 
     }
+
+    private async databaseTasks(){
+        await dataBaseConnection();
+    };
+
+    //private routes(){}
+
+    public listen(){ this.app.listen(this.port) ; console.log('Backend ON') };
+
+}
+
+export default Server ;
+
+/*
+    
     */
