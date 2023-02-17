@@ -10,10 +10,14 @@ const authHook = () => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        if(token){headers.append('token',token);getFetch()};
+        if(token){ headers.append('token',token) ; getFetch() };
     },[]);
 
-    return({token:data.token||null,isLoading,error})
+    return({
+        token:data.token||null,
+        isLoading,
+        error:(error) ? true : false
+    })
 
 }
 

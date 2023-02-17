@@ -5,11 +5,11 @@ import authHook from "../hooks/auth.hook";
 export const authContext = createContext<any>({});
 export const authProvider = ({children}:any) => {
 
-    const { data , isLoading , error } = authHook();
+    const { token , isLoading , error } = authHook();
 
     return(
-        (data !== null && !isLoading)
-        ? <authContext.Provider value={{data,isLoading,error}}>{children}</authContext.Provider>
+        (token !== null && !isLoading)
+        ? <authContext.Provider value={{token,isLoading}}>{children}</authContext.Provider>
         : <div className="container">
             {(error)
             ? <GridLoader color="#17FF00"/>
