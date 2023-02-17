@@ -1,19 +1,20 @@
-import { createContext } from "react";
+import { createContext, useEffect } from "react";
 import { GridLoader } from "react-spinners";
 import authHook from "../hooks/auth.hook";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import environment from "../../env/environment";
+import useFetchHook, { useFetchDefaultObject } from "../hooks/useFetch.hook";
 
 export const authContext = createContext<any>({});
 export const authProvider = ({children}:any) => {
 
-    //const { token , isLoading , error } = authHook();
+    const authFetchProps:useFetchDefaultObject = {route:'/user/google',method:'GET',body:undefined,headers:undefined};
 
     return(
         <GoogleOAuthProvider clientId={environment.googleClientID}>
-            <authContext.Provider value={{}}>{children}</authContext.Provider>
+            <authContext.Provider value={{authFetch:useFetchHook(authFetchProps)}}>{children}</authContext.Provider>
         </GoogleOAuthProvider>
-    )
+    );
 
     /*
     return(
