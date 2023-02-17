@@ -17,8 +17,8 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       <BrowserRouter>
         <Routes>
           <Route path='' element={ <PublicRoute><LoginOrRegister/></PublicRoute> } />
-          <Route path='*' element={ <PublicRoute><Navigate to=''/></PublicRoute> } />
           <Route path='private' element={ <PrivateRoute><Private/></PrivateRoute> } />
+          <Route path='*' element={ <PublicRoute><Navigate to=''/></PublicRoute> } />
         </Routes>
       </BrowserRouter>
     </AP>

@@ -1,3 +1,5 @@
+import { GoogleLogin } from '@react-oauth/google';
+
 const LoginOrRegister = () => {
 
     return(
@@ -5,6 +7,7 @@ const LoginOrRegister = () => {
 
             <div className="row"><div className="col">
                 <h2>Login or Register</h2>
+                <GoogleLogin onSuccess={console.log}/>
             </div></div>
 
         </div>
