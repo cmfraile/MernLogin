@@ -8,7 +8,7 @@ import useFetchHook, { useFetchDefaultObject } from "../hooks/useFetch.hook";
 export const authContext = createContext<any>({});
 export const authProvider = ({children}:any) => {
 
-    const authFetchProps:useFetchDefaultObject = {route:'/user/google',method:'GET',body:undefined,headers:undefined};
+    const authFetchProps:useFetchDefaultObject = {route:'/user/google',method:'POST',body:undefined,headers:undefined};
 
     return(
         <GoogleOAuthProvider clientId={environment.googleClientID}>
