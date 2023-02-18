@@ -10,20 +10,18 @@ const useFetchDefaultArgument:useFetchDefaultObject = { route:'',method:'GET',bo
 const useFetchHook = <queryData = any>(argument = useFetchDefaultArgument) => {
 
     const [ props , setProps ] = useState<useFetchDefaultObject>(argument) ;
-    const { route , method , body , headers } = props ;
-
     const [ state , setState ] = useState<getFetch<queryData>>({data:null,isLoading:false,error:null});
 
     const getFetch = async():Promise<void> => {
 
+        const { route , method , body , headers } = props ;
+
         setState({...state,isLoading:true});
         await(await fetch(`${url}${route}`,{method,mode:'cors',body,headers})).json()
-        .then(data => {setState({data,isLoading:false,error:null}) })
-        .catch(error => {setState({data:null,isLoading:false,error}) });
+        .then(data => { setState({data,isLoading:false,error:null}) })
+        .catch(error => { setState({data:null,isLoading:false,error}) });
 
     }
-
-    //useEffect(() => { getFetch() },[url]);
     
     return({
         fetchState:state,
