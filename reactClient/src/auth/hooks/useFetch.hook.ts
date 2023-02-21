@@ -1,4 +1,4 @@
-import { useState , useEffect } from "react";
+import { useState } from "react";
 import environment from "../../env/environment";
 
 const url:string = environment.backendURL;
