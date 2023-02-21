@@ -5,14 +5,14 @@ import { useFetchDefaultObject } from '../auth/hooks/useFetch.hook';
 
 const LoginOrRegister = () => {
 
-    const { fetchState , setFetchProps , getFetch } = useContext(authContext).authFetch;
+    const { fetchState , getFetch } = useContext(authContext).authFetch;
     const { setUser } = useContext(authContext).userHook;
     const argumentFetch:useFetchDefaultObject = {route:'user/google',method:'POST',body:undefined,headers:undefined}
 
     const onSuccess = async({access_token}:{access_token:string}) => {
         const headers = {'token':access_token};
         getFetch({...argumentFetch,headers})
-        .then(() => {setUser(fetchState.data) ; localStorage.setItem('user',fetchState.data)})
+        .then(() => {setUser(fetchState.data)})
     };
 
     const login = useGoogleLogin({onSuccess});
