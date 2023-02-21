@@ -13,14 +13,14 @@ import Private from './pages/private.page';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <AP>
-      <BrowserRouter>
-        <Routes>
-          <Route path='' element={ <PublicRoute><LoginOrRegister/></PublicRoute> } />
-          <Route path='private' element={ <PrivateRoute><Private/></PrivateRoute> } />
-          <Route path='*' element={ <PublicRoute><Navigate to=''/></PublicRoute> } />
-        </Routes>
-      </BrowserRouter>
-    </AP>
+    <BrowserRouter>
+      <AP>
+          <Routes>
+            <Route path='' element={ <PublicRoute><LoginOrRegister/></PublicRoute> }  />
+            <Route path='private' element={ <PrivateRoute><Private/></PrivateRoute> } />
+            <Route path='*' element={ <PublicRoute><Navigate to=''/></PublicRoute> }  />
+          </Routes>
+      </AP>
+    </BrowserRouter>
   </React.StrictMode>,
 )
