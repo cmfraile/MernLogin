@@ -10,10 +10,13 @@ const userHook = () => {
     const { fetchState , getFetch } = useFetchHook();
     const argumentFetch:useFetchDefaultObject = {route:'user/checkToken',method:'GET',body:undefined,headers:undefined}
 
-    const setUser = (data:any) => { console.log(data) ; setFullUser(data) ; localStorage.setItem('user',JSON.stringify(data)) };
+    const setUser = (data:any) => { setFullUser((prevState:any) => {
+        const newState = data ;
+        return newState ;
+    }) ; localStorage.setItem('user',JSON.stringify(data)) };
 
     useEffect(() => {
-        localStorage.clear()
+        //localStorage.clear()
         const user:any = (localStorage.getItem('user')) ? JSON.parse(`${localStorage.getItem('user')}`) : null ;
         if(!user){ setFullUser(null) ; return };
         const fetchArgument = {...argumentFetch,...{headers:user.token}};

@@ -15,8 +15,14 @@ const useFetchHook = <queryData = any>() => {
         const { route , method , body , headers } = argument ;
         setState({...state,isLoading:true});
         await(await fetch(`${url}${route}`,{method,mode:'cors',body,headers})).json()
-        .then(data => { setState({data,isLoading:false,error:null}) ; resolve() })
-        .catch(error => { setState({data:null,isLoading:false,error}) ; reject() });
+        .then(data => { setState((prevState:any) => {
+            const newState = {data,isLoading:false,error:null};
+            return newState
+        }) ; resolve() })
+        .catch(error => { setState((prevState:any) => {
+            const newState = {data:null,isLoading:false,error};
+            return newState
+        }) ; reject() });
     });
 
     return({

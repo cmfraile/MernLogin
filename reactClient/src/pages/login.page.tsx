@@ -24,8 +24,6 @@ const LoginOrRegister = () => {
                 <h2>Login or Register</h2>
                 <button onClick={() => {login()}} >Login/register with google</button>
                 <br />
-                <code>{JSON.stringify(localStorage.getItem('user'))}</code>
-                <br />
                 <code>{JSON.stringify(fetchState)}</code>
             </div></div>
 
