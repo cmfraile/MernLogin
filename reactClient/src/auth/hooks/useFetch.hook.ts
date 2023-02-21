@@ -8,27 +8,20 @@ export interface useFetchDefaultObject { route:string , method:method , body:any
 
 const useFetchHook = <queryData = any>() => {
 
-    const [ state , setState ] = useState<getFetch<queryData>>({data:null,isLoading:false,error:null});
+    const [ state , setState ] = useState<getFetch<queryData>>({data:null,isLoading:true,error:null});
 
-    const getFetch = async(argument:useFetchDefaultObject):Promise<void> => new Promise(
-    async(resolve,reject) => {
-        const { route , method , body , headers } = argument ;
+    const getFetch = async(args:useFetchDefaultObject):Promise<void> => {
+
+        const { route , method , body , headers } = args ;
+
         setState({...state,isLoading:true});
         await(await fetch(`${url}${route}`,{method,mode:'cors',body,headers})).json()
-        .then(data => { setState((prevState:any) => {
-            const newState = {data,isLoading:false,error:null};
-            return newState
-        }) ; resolve() })
-        .catch(error => { setState((prevState:any) => {
-            const newState = {data:null,isLoading:false,error};
-            return newState
-        }) ; reject() });
-    });
+        .then(data => {setState({data,isLoading:false,error:null}) })
+        .catch(error => {setState({data:null,isLoading:false,error}) });
 
-    return({
-        fetchState:state,
-        getFetch
-    });
+    }
+    //useEffect(() => { getFetch() },[url]);
+    return({fetchState:state,getFetch});
 
 }
 
