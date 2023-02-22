@@ -1,5 +1,5 @@
-import React, { createContext, useEffect, useReducer } from "react";
 import { fetchComponent } from "../../components/fetch";
+import { useReducer } from "react";
 
 enum authTypes { login = '[AUTH] Login' , check = '[AUTH] Check' , logout = '[AUTH] Logout' };
 type userLoading = 'CheckingUser'|'NoUser'
@@ -8,29 +8,28 @@ interface action {type:authTypes,payload?:session};
 
 const initialState:session = {user:'CheckingUser'};
 
-const AuthReducer = (state:session = initialState,action:action) => {
+const userHook = () => {
 
-    if(!action){return state};
-    const loginOrCheck = () => {
-        if(!payload){throw new Error('El login no posee un payload correcto')}
-        localStorage.setItem('user',JSON.stringify(payload))
-        return payload
-    };
-    
-    const { type , payload } = action ; 
-    const { login , check , logout } = authTypes;
-    
-    switch(type){
-        case login  : return loginOrCheck() ;
-        case check  : return loginOrCheck() ;
-        case logout : { localStorage.clear() ; return {user:'NoUser'} } ;
-        default : throw new Error() ;
+    const AuthReducer = (state:session = initialState,action:action) => {
+
+        if(!action){return state};
+        const loginOrCheck = () => {
+            if(!payload){throw new Error('El login no posee un payload correcto')}
+            localStorage.setItem('user',JSON.stringify(payload))
+            return payload
+        };
+        
+        const { type , payload } = action ; 
+        const { login , check , logout } = authTypes;
+        
+        switch(type){
+            case login  : return loginOrCheck() ;
+            case check  : return loginOrCheck() ;
+            case logout : { localStorage.clear() ; return {user:'NoUser'} } ;
+            default : throw new Error() ;
+        }
+        
     }
-    
-}
-
-const AuthContext = createContext<any>({});
-const AuthProvider = ({children}:any) => {
 
     const [ user , dispatchUser ] = useReducer<React.Reducer<any,any>,any>(AuthReducer,initialState,() => {
         const caso = localStorage.getItem('user');
@@ -70,7 +69,6 @@ const AuthProvider = ({children}:any) => {
         logout:() => {dispatchUser({type:logout})},
     }
 
-    return(<AuthContext.Provider value={{user,authCrud}}>{children}</AuthContext.Provider>)
 }
 
-export { AuthContext , AuthProvider }
+export default userHook
