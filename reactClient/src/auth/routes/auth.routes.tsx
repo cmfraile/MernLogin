@@ -1,19 +1,19 @@
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { Navigate } from "react-router-dom";
 import { authContext } from "../context/auth.context";
 
-const zoneBoolean = ({user}:any):boolean => (user == 'CheckingUser' || user == 'NoUser') ? false : true ;
+const isPublic = (user:any):boolean => (user == 'CheckingUser' || user == 'NoUser') ? true : false ;
 
 export const PrivateRoute = ({children}:any) => {
     const { user } = useContext(authContext);
-    return zoneBoolean(user)
+    return (isPublic(user))
     ? children
     : <Navigate to='/'/>
 }
 
 export const PublicRoute = ({children}:any) => {
-    const { user } = useContext(authContext).userHook;
-    return !zoneBoolean(user)
+    const { user } = useContext(authContext);
+    return (!isPublic(user))
     ? children
     : <Navigate to='/private'/>
 }

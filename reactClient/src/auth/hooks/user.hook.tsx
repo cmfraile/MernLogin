@@ -1,5 +1,5 @@
-import React, { createContext, useEffect, useReducer } from "react";
 import { fetchComponent } from "../../components/fetch";
+import { useEffect, useReducer } from "react";
 
 enum authTypes { login = '[AUTH] Login' , check = '[AUTH] Check' , logout = '[AUTH] Logout' };
 type userLoading = 'CheckingUser'|'NoUser'
@@ -8,41 +8,7 @@ interface action {type:authTypes,payload?:session};
 
 const initialState:session = {user:'CheckingUser'};
 
-const AuthReducer = (state:session = initialState,action:action) => {
-
-    if(!action){return state};
-    const loginOrCheck = () => {
-        if(!payload){throw new Error('El login no posee un payload correcto')}
-        localStorage.setItem('user',JSON.stringify(payload))
-        return payload
-    };
-    
-    const { type , payload } = action ; 
-    const { login , check , logout } = authTypes;
-    
-    switch(type){
-        case login  : return loginOrCheck() ;
-        case check  : return loginOrCheck() ;
-        case logout : { localStorage.clear() ; return {user:'NoUser'} } ;
-        default : throw new Error() ;
-    }
-    
-}
-
-const AuthContext = createContext<any>({});
-const AuthProvider = ({children}:any) => {
-
-    const [ user , dispatchUser ] = useReducer<React.Reducer<any,any>,any>(AuthReducer,initialState,() => {
-        const caso = localStorage.getItem('user');
-        if(!caso){
-            return {user:'NoUser'} ;
-        }else{
-            const { token } = JSON.parse(caso);
-            fetchCallback(token,'CHECK')
-        }
-    });
-
-    const { login , check , logout } = authTypes;
+const userHook = () => {
 
     const fetchCallback = async(token:string,loginOrCheck:'LOGIN'|'CHECK'):Promise<void> => {
 
@@ -57,20 +23,55 @@ const AuthProvider = ({children}:any) => {
 
         try{
             const headers = {token};
+            if(loginOrCheck == 'CHECK'){dispatchUser({type:authTypes.check})}
             await fetchComponent({route:route(),method:'POST',body:undefined,headers})
-            .then((payload:any) => {dispatchUser({type:check,payload})})
-            .catch(() => {dispatchUser({type:logout})})
+            .then((payload:any) => {dispatchUser({type:authTypes.login,payload})})
+            .catch(() => {dispatchUser({type:authTypes.logout})})
         }catch(err){console.log}
 
     }
 
+    const AuthReducer = (state:session = initialState,action:action) => {
+        
+        if(!action){return state};
+        const loginOrCheck = () => {
+            if(!payload){throw new Error('El login no posee un payload correcto')}
+            localStorage.setItem('user',JSON.stringify(payload))
+            return payload
+        };
+        
+        const { type , payload } = action ; 
+        const { login , check , logout } = authTypes;
+        
+        switch(type){
+            case login  : return loginOrCheck() ;
+            case check  : return { user:'CheckingUser' } ;
+            case logout : { localStorage.clear() ; return { user:'NoUser' } } ;
+            default : throw new Error() ;
+        }
+        
+    }
+
+    const [ user , dispatchUser ] = useReducer<React.Reducer<any,any>,any>(AuthReducer,initialState,() => {
+        const caso = localStorage.getItem('user');
+        if(!caso){
+            return {user:'NoUser'} ;
+        }else{
+            const { token } = JSON.parse(caso);
+            fetchCallback(token,'CHECK')
+        }
+    });
+
     const authCrud = {
         loginAuth:async(token:string) => {try{await fetchCallback(token,'LOGIN')}catch(err){console.log}},
         check:async(token:string) => {try{await fetchCallback(token,'CHECK')}catch(err){console.log}},
-        logout:() => {dispatchUser({type:logout})},
+        logout:() => {dispatchUser({type:authTypes.logout})},
     }
 
-    return(<AuthContext.Provider value={{user,authCrud}}>{children}</AuthContext.Provider>)
+    useEffect(() => {console.log(user)},[user]);
+
+    return ({ user , authCrud })
+
 }
 
-export { AuthContext , AuthProvider }
+export default userHook

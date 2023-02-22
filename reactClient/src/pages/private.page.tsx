@@ -3,14 +3,14 @@ import { authContext } from "../auth/context/auth.context"
 
 const Private = () => {
 
-    const { user } = useContext(authContext).userHook
+    const { user } = useContext(authContext)
 
     return(
-        <div className="container">
+        <div className="container w-75">
 
             <div className="row"><div className="col">
                 <h2>Private zone</h2>
-                <p>{JSON.stringify(user)}</p>
+                <p>{user.user.email}</p>
             </div></div>
 
         </div>

@@ -1,13 +1,13 @@
 import { useGoogleLogin } from '@react-oauth/google';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { authContext } from '../auth/context/auth.context';
-import { useFetchDefaultObject } from '../auth/hooks/useFetch.hook';
 
 const LoginOrRegister = () => {
 
+    const { authCrud } = useContext(authContext);
+
     const onSuccess = async({access_token}:{access_token:string}) => {
-        const headers = {'token':access_token};
-        
+        await authCrud.loginAuth(access_token)
     };
 
     const login = useGoogleLogin({onSuccess});
