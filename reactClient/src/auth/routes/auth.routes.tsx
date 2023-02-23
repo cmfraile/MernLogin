@@ -1,19 +1,25 @@
-import { useContext, useEffect } from "react"
-import { Navigate } from "react-router-dom";
+import { useContext } from "react"
 import { authContext } from "../context/auth.context";
+import { session } from "../hooks/user.hook";
 
-const isPublic = (user:any):boolean => (user == 'CheckingUser' || user == 'NoUser') ? true : false ;
+const isPublic = (session:session):boolean => {
+    const { userState } = session;
+    if(!userState){ return false };
+    if(userState == 'guest'){return true};
+    if(userState == 'user'){return false};
+    return false
+};
 
 export const PrivateRoute = ({children}:any) => {
-    const { user } = useContext(authContext);
-    return (isPublic(user))
+    const { session , navigate } = useContext(authContext);
+    return (!isPublic(session))
     ? children
-    : <Navigate to='/'/>
+    : navigate('/')
 }
 
 export const PublicRoute = ({children}:any) => {
-    const { user } = useContext(authContext);
-    return (!isPublic(user))
+    const { session , navigate } = useContext(authContext);
+    return (isPublic(session))
     ? children
-    : <Navigate to='/private'/>
+    : navigate('/private')
 }

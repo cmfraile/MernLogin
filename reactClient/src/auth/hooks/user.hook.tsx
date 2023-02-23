@@ -1,14 +1,15 @@
 import { fetchComponent } from "../../components/fetch";
-import { useEffect, useReducer } from "react";
+import { useEffect, useLayoutEffect, useReducer } from "react";
+import { NavigateFunction } from "react-router-dom";
 
 enum authTypes { login = '[AUTH] Login' , check = '[AUTH] Check' , logout = '[AUTH] Logout' };
-type userLoading = 'CheckingUser'|'NoUser'
-interface session {user:{email:string,name:string,picture:string}|userLoading,token?:string};
+export type userLoading = 'user'|'checkingUser'|'guest';
+export interface session {userState:userLoading,user?:{email:string,name:string,picture:string},token?:string};
 interface action {type:authTypes,payload?:session};
 
-const initialState:session = {user:'CheckingUser'};
+const initialState:session = {userState:'checkingUser'};
 
-const userHook = () => {
+const userHook = (navigate:NavigateFunction) => {
 
     const fetchCallback = async(token:string,loginOrCheck:'LOGIN'|'CHECK'):Promise<void> => {
 
@@ -23,10 +24,10 @@ const userHook = () => {
 
         try{
             const headers = {token};
-            if(loginOrCheck == 'CHECK'){dispatchUser({type:authTypes.check})}
+            if(loginOrCheck == 'CHECK'){dispatchSession({type:authTypes.check})}
             await fetchComponent({route:route(),method:'POST',body:undefined,headers})
-            .then((payload:any) => {dispatchUser({type:authTypes.login,payload})})
-            .catch(() => {dispatchUser({type:authTypes.logout})})
+            .then((payload:any) => {dispatchSession({type:authTypes.login,payload})})
+            .catch(() => {dispatchSession({type:authTypes.logout})})
         }catch(err){console.log}
 
     }
@@ -44,33 +45,44 @@ const userHook = () => {
         const { login , check , logout } = authTypes;
         
         switch(type){
-            case login  : return loginOrCheck() ;
-            case check  : return { user:'CheckingUser' } ;
-            case logout : { localStorage.clear() ; return { user:'NoUser' } } ;
+            case login  : {
+                navigate('/private');
+                return loginOrCheck();
+            };
+            case check  : {
+                return { ...state , userState:'checkingUser' }
+            };
+            case logout : {
+                localStorage.clear();
+                navigate('/');
+                return { userState:'guest' }
+            };
             default : throw new Error() ;
         }
         
     }
 
-    const [ user , dispatchUser ] = useReducer<React.Reducer<any,any>,any>(AuthReducer,initialState,() => {
-        const caso = localStorage.getItem('user');
-        if(!caso){
-            return {user:'NoUser'} ;
-        }else{
-            const { token } = JSON.parse(caso);
-            fetchCallback(token,'CHECK')
-        }
-    });
-
     const authCrud = {
         loginAuth:async(token:string) => {try{await fetchCallback(token,'LOGIN')}catch(err){console.log}},
         check:async(token:string) => {try{await fetchCallback(token,'CHECK')}catch(err){console.log}},
-        logout:() => {dispatchUser({type:authTypes.logout})},
+        logout:() => {dispatchSession({type:authTypes.logout})},
     }
 
-    useEffect(() => {console.log(user)},[user]);
+    const [ session , dispatchSession ] = useReducer<React.Reducer<any,any>>(AuthReducer,initialState);
 
-    return ({ user , authCrud })
+    useLayoutEffect(() => {
+        const caso = localStorage.getItem('user');
+        if(!caso){authCrud.logout()}else{
+            const { token } = JSON.parse(caso);
+            authCrud.check(token);
+        }
+    },[]);
+
+    useEffect(() => {
+        console.log(session);
+    },[session])
+
+    return ({ session , authCrud })
 
 }
 
