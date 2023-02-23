@@ -29,21 +29,21 @@ const googleUser = async(req:Request,res:Response) => {
 
     }catch(err){return res.status(500).json()};
 
-}
-
+};
 const checkToken = async(req:Request,res:Response) => {
 
     const secret:any = process.env.JWTKEY;
     const token = req.header('token');
 
     try{
-        jwt.verify(`${token}`,secret,(err:any,{user,token}:any) => {
+        if(token == undefined){return res.status(403).json({validToken:false})};
+        jwt.verify(token,secret,(err:any,decoded:any) => {
             if(err){return res.status(403).json({validToken:false})};
-            if(token){return res.status(200).json(jwtSign(user))};
+            if(token){return res.status(200).json(jwtSign(decoded))};
         })
     }catch(err){return res.status(500).json()}
 
-}
+};
 
 const userRouter = Router();
 userRouter.post('/google',[],googleUser);
