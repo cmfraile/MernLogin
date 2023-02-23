@@ -9,7 +9,13 @@ import { session } from "../hooks/user.hook";
 export const authContext = createContext<any>({});
 export const authProvider = ({children}:any) => {
 
-    return(<></>)
+    return(
+        <GoogleOAuthProvider clientId={environment.googleClientID}>
+            <authContext.Provider value={{}}>
+                {children}
+            </authContext.Provider>
+        </GoogleOAuthProvider>
+    );
 
 }
 

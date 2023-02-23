@@ -10,7 +10,7 @@ const Private = () => {
 
             <div className="row"><div className="col">
                 <h2>Private zone</h2>
-                <p>{user.user.email}</p>
+                <p>User email</p>
             </div></div>
 
         </div>
