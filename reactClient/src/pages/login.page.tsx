@@ -4,10 +4,10 @@ import { authContext } from '../auth/context/auth.context';
 
 const LoginOrRegister = () => {
 
-    const { authCrud } = useContext(authContext);
+    //const { authCrud } = useContext(authContext);
 
     const onSuccess = async({access_token}:{access_token:string}) => {
-        await authCrud.loginAuth(access_token)
+        //
     };
 
     const login = useGoogleLogin({onSuccess});

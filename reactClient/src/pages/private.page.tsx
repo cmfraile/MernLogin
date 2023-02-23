@@ -3,7 +3,7 @@ import { authContext } from "../auth/context/auth.context"
 
 const Private = () => {
 
-    const { user } = useContext(authContext)
+    //const { user } = useContext(authContext)
 
     return(
         <div className="container w-75">

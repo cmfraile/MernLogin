@@ -2,6 +2,7 @@ import { useContext } from "react"
 import { authContext } from "../context/auth.context";
 import { session } from "../hooks/user.hook";
 
+/*
 const isPublic = (session:session):boolean => {
     const { userState } = session;
     if(!userState){ return false };
@@ -23,3 +24,7 @@ export const PublicRoute = ({children}:any) => {
     ? children
     : navigate('/private')
 }
+*/
+
+export const PrivateRoute = ({children}:any) => children ;
+export const PublicRoute =  ({children}:any) => children ;

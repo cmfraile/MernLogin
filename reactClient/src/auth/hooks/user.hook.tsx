@@ -11,6 +11,15 @@ const initialState:session = {userState:'checkingUser'};
 
 const userHook = (navigate:NavigateFunction) => {
 
+    return(<></>)
+
+}
+
+export default userHook
+
+/*
+const userHook = (navigate:NavigateFunction) => {
+
     const fetchCallback = async(token:string,loginOrCheck:'LOGIN'|'CHECK'):Promise<void> => {
 
         const route = ():string => {
@@ -57,7 +66,7 @@ const userHook = (navigate:NavigateFunction) => {
                 navigate('/');
                 return { userState:'guest' }
             };
-            default : throw new Error() ;
+            default : return state ;
         }
         
     }
@@ -85,5 +94,4 @@ const userHook = (navigate:NavigateFunction) => {
     return ({ session , authCrud })
 
 }
-
-export default userHook
+*/

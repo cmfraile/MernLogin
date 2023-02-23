@@ -9,6 +9,13 @@ import { session } from "../hooks/user.hook";
 export const authContext = createContext<any>({});
 export const authProvider = ({children}:any) => {
 
+    return(<></>)
+
+}
+
+/*
+export const authProvider = ({children}:any) => {
+
     const navigate = useNavigate()
     const { session , authCrud } = userHook(navigate);
 
@@ -28,3 +35,4 @@ export const authProvider = ({children}:any) => {
     );
 
 }
+*/

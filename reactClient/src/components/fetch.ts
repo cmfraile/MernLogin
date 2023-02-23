@@ -8,5 +8,5 @@ const url:string = environment.backendURL;
 export const fetchComponent = async({route,method,body,headers}:fetchArgument = defaultArgument) => new Promise(async(resolve,reject) => {
     await(await fetch(`${url}${route}`,{method,mode:'cors',body,headers})).json()
     .then(data => resolve(data))
-    .catch((error:any) => reject(error))
+    .catch(error => reject(error))
 })
