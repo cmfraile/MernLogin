@@ -3,14 +3,15 @@ import { authContext } from "../auth/context/auth.context"
 
 const Private = () => {
 
-    //const { user } = useContext(authContext)
+    const { session , authCrud } = useContext(authContext);
 
     return(
         <div className="container w-75">
 
             <div className="row"><div className="col">
                 <h2>Private zone</h2>
-                <p>User email</p>
+                <p>{session.user.email}</p>
+                <button onClick={() => {authCrud.logout()}}>Logout</button>
             </div></div>
 
         </div>

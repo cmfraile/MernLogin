@@ -1,8 +1,8 @@
 import { useContext } from "react"
 import { authContext } from "../context/auth.context";
 import { session } from "../hooks/user.hook";
+import { Navigate } from "react-router-dom";
 
-/*
 const isPublic = (session:session):boolean => {
     const { userState } = session;
     if(!userState){ return false };
@@ -12,19 +12,15 @@ const isPublic = (session:session):boolean => {
 };
 
 export const PrivateRoute = ({children}:any) => {
-    const { session , navigate } = useContext(authContext);
+    const { session } = useContext(authContext);
     return (!isPublic(session))
     ? children
-    : navigate('/')
+    : <Navigate to='/'/>
 }
 
 export const PublicRoute = ({children}:any) => {
-    const { session , navigate } = useContext(authContext);
+    const { session } = useContext(authContext);
     return (isPublic(session))
     ? children
-    : navigate('/private')
+    : <Navigate to='/private'/>
 }
-*/
-
-export const PrivateRoute = ({children}:any) => children ;
-export const PublicRoute =  ({children}:any) => children ;

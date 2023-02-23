@@ -9,16 +9,7 @@ interface action {type:authTypes,payload?:session};
 
 const initialState:session = {userState:'checkingUser'};
 
-const userHook = (navigate:NavigateFunction) => {
-
-    return(<></>)
-
-}
-
-export default userHook
-
-/*
-const userHook = (navigate:NavigateFunction) => {
+const userHook = () => {
 
     const fetchCallback = async(token:string,loginOrCheck:'LOGIN'|'CHECK'):Promise<void> => {
 
@@ -44,27 +35,22 @@ const userHook = (navigate:NavigateFunction) => {
     const AuthReducer = (state:session = initialState,action:action) => {
         
         if(!action){return state};
-        const loginOrCheck = () => {
-            if(!payload){throw new Error('El login no posee un payload correcto')}
-            localStorage.setItem('user',JSON.stringify(payload))
-            return payload
-        };
         
         const { type , payload } = action ; 
         const { login , check , logout } = authTypes;
         
         switch(type){
             case login  : {
-                navigate('/private');
-                return loginOrCheck();
+                const newState = { userState:'user' , ...payload } ;
+                localStorage.setItem('session',JSON.stringify(newState));
+                return newState;
             };
             case check  : {
-                return { ...state , userState:'checkingUser' }
+                return { ...state , userState:'checkingUser' };
             };
             case logout : {
-                localStorage.clear();
-                navigate('/');
-                return { userState:'guest' }
+                localStorage.removeItem('session');
+                return { userState:'guest' };
             };
             default : return state ;
         }
@@ -73,25 +59,25 @@ const userHook = (navigate:NavigateFunction) => {
 
     const authCrud = {
         loginAuth:async(token:string) => {try{await fetchCallback(token,'LOGIN')}catch(err){console.log}},
-        check:async(token:string) => {try{await fetchCallback(token,'CHECK')}catch(err){console.log}},
+        checkAuth:async(token:string) => {try{await fetchCallback(token,'CHECK')}catch(err){console.log}},
         logout:() => {dispatchSession({type:authTypes.logout})},
     }
 
     const [ session , dispatchSession ] = useReducer<React.Reducer<any,any>>(AuthReducer,initialState);
 
-    useLayoutEffect(() => {
-        const caso = localStorage.getItem('user');
+    useEffect(() => {
+        const caso = localStorage.getItem('session');
         if(!caso){authCrud.logout()}else{
             const { token } = JSON.parse(caso);
-            authCrud.check(token);
+            if(!token){authCrud.logout()}
+            authCrud.checkAuth(token)
         }
     },[]);
 
-    useEffect(() => {
-        console.log(session);
-    },[session])
+    useEffect(() => {console.log(session)},[session])
 
-    return ({ session , authCrud })
+    return({session , authCrud})
 
 }
-*/
+
+export default userHook
